@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 const line = require("@line/bot-sdk");
 const path = require("path");
-const { channelAccessToken, groupId } = require("./configs");
+const { channelAccessToken, groupId, baseUrl } = require("./configs");
 
 // --------------------- Utils -----------------------
 const getCurrentTimeParts = () => {
@@ -29,7 +29,7 @@ const getResultPage = async (page, id) => {
     return;
   }
 
-  await page.goto("https://kps.udh.go.th/vaccine/", { waitUntil: "networkidle2" });
+  await page.goto(baseUrl, { waitUntil: "networkidle2" });
   await page.type("input#mat-input-3", id, { delay: 500 });
 
   const [, submitButton] = await page.$$("button[type=submit]");
@@ -42,7 +42,7 @@ const getResultPage = async (page, id) => {
 
   await page.waitForNavigation();
 
-  if (page.url() !== "https://kps.udh.go.th/vaccine/register") {
+  if (page.url() !== `${baseUrl}register`) {
     return;
   }
 
@@ -65,7 +65,14 @@ const client = new line.Client({ channelAccessToken });
 
 const sendMessage = async (text, imageUrl) => {
   await client.pushMessage(groupId, { type: "text", text });
-  // await client.pushMessage(groupId, { type: "image", previewImageUrl: imageUrl, originalContentUrl: imageUrl });
+
+  if (imageUrl) {
+    await client.pushMessage(groupId, {
+      type: "image",
+      previewImageUrl: imageUrl,
+      originalContentUrl: imageUrl,
+    });
+  }
 };
 
 // --------------------- Main -----------------------

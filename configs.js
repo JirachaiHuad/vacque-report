@@ -3,4 +3,5 @@ module.exports = {
   groupId: process.env.LINE_GROUP_ID,
   ID_P: process.env.ID_P,
   ID_M: process.env.ID_M,
+  baseUrl: process.env.BASE_URL,
 };

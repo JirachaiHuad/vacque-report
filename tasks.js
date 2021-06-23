@@ -9,10 +9,15 @@ const reportTask = () => {
   console.log("--------------------------------------------------");
 
   return cron.schedule(
-    "0 0 * * *",
+    "30 9 * * *",
     async () => {
-      await report(ID_P);
-      await report(ID_M);
+      try {
+        await report(ID_P);
+        await report(ID_M);
+      } catch (error) {
+        console.log("ERROR REPORTING!");
+        console.error(error);
+      }
     },
     {
       scheduled: false,
