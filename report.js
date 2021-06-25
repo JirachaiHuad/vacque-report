@@ -19,13 +19,7 @@ const getCurrentTimeParts = () => {
 
 // --------------------- Puppeteer --------------------
 const setupPage = async () => {
-  // const browser = await puppeteer.launch();
-
-  // unsafe
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   return { browser, page };
