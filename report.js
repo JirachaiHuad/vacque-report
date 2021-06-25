@@ -5,7 +5,8 @@ const { channelAccessToken, groupId, baseUrl } = require("./configs");
 
 // --------------------- Utils -----------------------
 const getCurrentTimeParts = () => {
-  const now = new Date();
+  const offsetBangkok = (420 + new Date().getTimezoneOffset()) * 60 * 1000;
+  const now = new Date(Date.now() + offsetBangkok);
   const unix = now.getTime().toString();
   const date = ("0" + now.getDate()).slice(-2);
   const month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -18,7 +19,13 @@ const getCurrentTimeParts = () => {
 
 // --------------------- Puppeteer --------------------
 const setupPage = async () => {
-  const browser = await puppeteer.launch();
+  // const browser = await puppeteer.launch();
+
+  // unsafe
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
   const page = await browser.newPage();
 
   return { browser, page };
