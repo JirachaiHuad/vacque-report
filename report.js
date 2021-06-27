@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 const line = require("@line/bot-sdk");
 const path = require("path");
-const { channelAccessToken, groupId, baseUrl } = require("./configs");
+const { channelAccessToken, groupId, baseUrl, serverUrl } = require("./configs");
 
 // --------------------- Utils -----------------------
 const getCurrentTimeParts = () => {
@@ -58,7 +58,10 @@ const getResultText = async (page) => {
   const { date, month, year, hours, minutes } = getCurrentTimeParts();
   const updatedAt = `[อัพเดทล่าสุดเมื่อวันที่ ${date}/${month}/${year} เวลา ${hours}:${minutes}]`;
 
-  return `${updatedAt}\n\n${fullName}\n\n${resultPart1}${resultPart2}`;
+  // result page seems to be changed. to be checked
+  // return `${updatedAt}\n\n${fullName}\n\n${resultPart1}${resultPart2}`;
+
+  return updatedAt;
 };
 
 // --------------------- Line ----------------------
@@ -89,10 +92,10 @@ const report = async (id) => {
 
   const text = await getResultText(resultPage);
 
-  // const { date, month, year, hours, minutes, unix } = getCurrentTimeParts();
-  // const imageName = `ss__${year}-${month}-${date}__${hours}-${minutes}__no${unix}.jpeg`;
-  // const imagePath = path.join(__dirname, "screenshots", `${imageName}`);
-  // await resultPage.screenshot({ path: imagePath });
+  const { date, month, year, hours, minutes, unix } = getCurrentTimeParts();
+  const imageName = `ss__${year}-${month}-${date}__${hours}-${minutes}__no${unix}.jpeg`;
+  const imagePath = path.join(__dirname, "screenshots", `${imageName}`);
+  await resultPage.screenshot({ path: imagePath });
 
   await browser.close();
 
@@ -100,8 +103,8 @@ const report = async (id) => {
   console.log(text);
   console.log("======================================");
 
-  // const imageUrl = `HTTPS${imageName}`;
-  await sendMessage(text);
+  const imageUrl = `${serverUrl}${imageName}`;
+  await sendMessage(text, imageUrl);
 };
 
 module.exports = report;
