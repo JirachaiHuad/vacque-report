@@ -4,4 +4,5 @@ module.exports = {
   ID_P: process.env.ID_P,
   ID_M: process.env.ID_M,
   baseUrl: process.env.BASE_URL,
+  serverUrl: process.env.SERVER_URL,
 };
