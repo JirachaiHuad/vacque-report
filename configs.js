@@ -5,4 +5,5 @@ module.exports = {
   ID_M: process.env.ID_M,
   baseUrl: process.env.BASE_URL,
   serverUrl: process.env.SERVER_URL,
+  taskSchedule: process.env.TASK_SCHEDULE,
 };

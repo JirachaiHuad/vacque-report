@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 
 const report = require("./report");
-const { ID_P, ID_M } = require("./configs");
+const { ID_P, ID_M, taskSchedule } = require("./configs");
 
 const reportTask = () => {
   console.log("--------------------------------------------------");
@@ -9,7 +9,7 @@ const reportTask = () => {
   console.log("--------------------------------------------------");
 
   return cron.schedule(
-    "30 9 * * *",
+    taskSchedule,
     async () => {
       try {
         await report(ID_P);
