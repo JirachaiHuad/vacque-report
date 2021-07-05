@@ -19,7 +19,7 @@ const getCurrentTimeParts = () => {
 
 // --------------------- Puppeteer --------------------
 const setupPage = async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ defaultViewport: { width: 800, height: 800 } });
   const page = await browser.newPage();
 
   return { browser, page };
