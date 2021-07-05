@@ -50,18 +50,8 @@ const getResultPage = async (page, id) => {
   return page;
 };
 
-const getResultText = async (page) => {
+const waitForPageReady = async (page) => {
   await page.waitForSelector("div.p-4");
-
-  const texts = await page.$$eval("mat-label > b", (bs) => bs.map((b) => b.textContent));
-  const [resultPart1, resultPart2, , , fullName] = texts.map((t) => t.trim());
-  const { date, month, year, hours, minutes } = getCurrentTimeParts();
-  const updatedAt = `[อัพเดทล่าสุดเมื่อวันที่ ${date}/${month}/${year} เวลา ${hours}:${minutes}]`;
-
-  // result page seems to be changed. to be checked
-  // return `${updatedAt}\n\n${fullName}\n\n${resultPart1}${resultPart2}`;
-
-  return updatedAt;
 };
 
 // --------------------- Line ----------------------
@@ -90,21 +80,24 @@ const report = async (id) => {
     return;
   }
 
-  const text = await getResultText(resultPage);
+  await waitForPageReady(resultPage);
 
   const { date, month, year, hours, minutes, unix } = getCurrentTimeParts();
+
   const imageName = `ss__${year}-${month}-${date}__${hours}-${minutes}__no${unix}.jpeg`;
   const imagePath = path.join(__dirname, "screenshots", `${imageName}`);
   await resultPage.screenshot({ path: imagePath });
 
   await browser.close();
 
-  console.log("============= RESULT =================");
-  console.log(text);
-  console.log("======================================");
-
+  const updatedAt = `[อัพเดทล่าสุดเมื่อวันที่ ${date}/${month}/${year} เวลา ${hours}:${minutes}]`;
   const imageUrl = `${serverUrl}${imageName}`;
-  await sendMessage(text, imageUrl);
+  await sendMessage(updatedAt, imageUrl);
+
+  console.log("++++++++++++ REPORT SUCCEEDED ++++++++++++");
+  console.log(`> ID: ${id}`);
+  console.log(`> timestamp: ${date}/${month}/${year} - ${hours}:${minutes}`);
+  console.log("++++++++++++++++++++++++++++++++++++++++++");
 };
 
 module.exports = report;
