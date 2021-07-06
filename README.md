@@ -1,12 +1,12 @@
 # Vaccine Schedule Report
 
-> Automatically check and report an update on a vaccination schedule.
+> **Automatically check and report an update on a vaccination schedule.**
 
 ## Description
 
 Due to postponement of vaccination rollout, it is advised to check on a particular website to see if there is any update.
 
-It is considered to be challenging for my parents to go to the website to check for the update themselve. So, I made this to assist them on such tasks.
+It is considered to be challenging for my parents to go to the website and check for the update themselve, so I made this to assist them on such tasks.
 
 The purpose of this small application is to automate tasks where it goes to a particular website, fill-in some form, get a result with screenshot and send them via messaging app's bot.
 
